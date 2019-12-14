@@ -4,6 +4,7 @@ project(kinect-fusion)
 
 set(EIGEN_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/submodules/eigen/Eigen" CACHE PATH "Path to the Eigen headers")
 set(OPENCL_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/submodules/opencl-headers" CACHE PATH "Path to the OpenCL headers")
+set(GLM_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/submodules/glm/glm" CACHE PATH "Path to the GLM headers for OpenGL")
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -17,7 +18,11 @@ else()
     set(OPENCL_LIBRARIES "/usr/lib/x86_64-linux-gnu/libOpenCL.so.1")
 endif()
 
-include_directories(${EIGEN_INCLUDE_DIR} ${OPENCL_INCLUDE_DIR})
+find_package(OpenGL REQUIRED)
+find_package(GLEW REQUIRED)
+find_package(glfw3 REQUIRED)
 
-add_executable(kinect-fusion src/main.cpp)
-target_link_libraries(kinect-fusion ${OPENCL_LIBRARIES})
+include_directories("${EIGEN_INCLUDE_DIR}" "${OPENCL_INCLUDE_DIR}" "${GLEW_INCLUDE_DIRS}" "${GLM_INCLUDE_DIR}")
+link_libraries(${OPENCL_LIBRARIES} ${OPENGL_LIBRARY} ${GLEW_LIBRARIES} glfw)
+
+add_executable(kinect-fusion src/main.cpp src/shader.hpp src/shader.cpp)

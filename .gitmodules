@@ -4,3 +4,6 @@
 [submodule "submodules/opencl-headers"]
 	path = submodules/opencl-headers
 	url = git@github.com:KhronosGroup/OpenCL-Headers.git
+[submodule "submodules/glm"]
+	path = submodules/glm
+	url = git@github.com:g-truc/glm.git
