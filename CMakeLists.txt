@@ -22,7 +22,12 @@ find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(glfw3 REQUIRED)
 
-include_directories("${EIGEN_INCLUDE_DIR}" "${OPENCL_INCLUDE_DIR}" "${GLEW_INCLUDE_DIRS}" "${GLM_INCLUDE_DIR}")
-link_libraries(${OPENCL_LIBRARIES} ${OPENGL_LIBRARY} ${GLEW_LIBRARIES} glfw)
+include_directories("${EIGEN_INCLUDE_DIR}" "${GLM_INCLUDE_DIR}") 
+include_directories("${OPENCL_INCLUDE_DIR}" "${OPENGL_INCLUDE_DIR}" "${GLEW_INCLUDE_DIR}")
+link_libraries(${OPENCL_LIBRARIES} ${OPENGL_LIBRARY} ${GLEW_LIBRARIES} glfw freeimage)
 
 add_executable(kinect-fusion src/main.cpp src/shader.hpp src/shader.cpp)
+
+# Visual Studio properties
+set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT kinect-fusion)
+set_property(TARGET kinect-fusion PROPERTY VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/)
