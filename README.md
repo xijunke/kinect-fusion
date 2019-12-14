@@ -14,6 +14,19 @@ git clone --recurse-submodules git@github.com:shalen-original/kinect-fusion.git
 
 **(Windows)** Need to install the OpenCL driver. For OpenGL, needs GLEW and GLFW, they have setup for Windows. TODO add more details here.
 
+Before building and running the project, download the [test dataset](https://vision.in.tum.de/data/datasets/rgbd-dataset) in the `data` folder. After this step, the folder tree should look like:
+
+```
+.
+├── src
+├── submodules
+├── data
+│   └── rgbd_dataset_freiburg1_xyz
+├── CMakeLists.txt
+├── LICENSE
+└── README.md
+```
+
 Move to the project folder and build the project:
 
 ```sh
