@@ -15,7 +15,7 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <GLFW/glfw3.h>
-#include "shader.hpp"
+#include "opengl-helpers/ShaderHelper.h"
 
 #include <FreeImage.h>
 
@@ -164,7 +164,7 @@ int testFunction(){
     glBindVertexArray(VertexArrayID);
 
     // Create and compile our GLSL program from the shaders
-    GLuint programID = LoadShaders("src/shaders/SimpleVertexShader.glsl", "src/shaders/SimplePixelShader.glsl");
+    GLuint programID = ShaderHelper::loadProgram("src/shaders/SimpleVertexShader.glsl", "src/shaders/SimplePixelShader.glsl");
 
     static const GLfloat g_vertex_buffer_data[] = {
         -1.0f,
