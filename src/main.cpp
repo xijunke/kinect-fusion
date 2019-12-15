@@ -9,7 +9,7 @@ int testFunction();
 int main(int argc, char * argv[]) {
     //testFunction();
 
-    auto sensor = std::make_unique<MockSensor>(MockSensor("data/rgbd_dataset_freiburg1_xyz"));
+    auto sensor = std::make_unique<MockSensor>(MockSensor("data/rgbd_dataset_freiburg1_xyz", 30));
 
     while(true){
         auto frame = sensor->getNextFrame();
