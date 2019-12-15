@@ -7,7 +7,7 @@
 int testFunction();
 
 int main(int argc, char * argv[]) {
-    //testFunction();
+    testFunction();
 
     auto sensor = std::make_unique<MockSensor>(MockSensor("data/rgbd_dataset_freiburg1_xyz", 30));
 

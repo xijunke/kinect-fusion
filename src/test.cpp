@@ -15,6 +15,7 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <GLFW/glfw3.h>
+#include "opengl-helpers/WindowHelper.h"
 #include "opengl-helpers/ShaderHelper.h"
 
 #include <FreeImage.h>
@@ -115,56 +116,14 @@ int testFunction(){
     free(C);
 
     // OPENGL
-    GLFWwindow *window;
-    // Initialise GLFW
-    if (!glfwInit())
-    {
-        fprintf(stderr, "Failed to initialize GLFW\n");
-        getchar();
-        return -1;
-    }
-
-    glfwWindowHint(GLFW_SAMPLES, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // To make MacOS happy; should not be needed
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-    // Open a window and create its OpenGL context
-    window = glfwCreateWindow(1024, 768, "Tutorial 01", NULL, NULL);
-    if (window == NULL)
-    {
-        fprintf(stderr, "Failed to open GLFW window. If you have an Intel GPU, they are not 3.3 compatible. Try the 2.1 version of the tutorials.\n");
-        getchar();
-        glfwTerminate();
-        return -1;
-    }
-    glfwMakeContextCurrent(window);
-
-    // Initialize GLEW
-    if (glewInit() != GLEW_OK)
-    {
-        fprintf(stderr, "Failed to initialize GLEW\n");
-        getchar();
-        glfwTerminate();
-        return -1;
-    }
-
-    // Ensure we can capture the escape key being pressed below
-    glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
-
-    // Dark blue background
-    glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
-
-    // Dark blue background
-    glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
+    Window window("KinectFusion", 1024, 768);
 
     GLuint VertexArrayID;
     glGenVertexArrays(1, &VertexArrayID);
     glBindVertexArray(VertexArrayID);
 
     // Create and compile our GLSL program from the shaders
-    GLuint programID = ShaderHelper::loadProgram("src/shaders/SimpleVertexShader.glsl", "src/shaders/SimplePixelShader.glsl");
+    GLuint programID = ShaderHelper::loadProgram("src/opengl-helpers/vertex.glsl", "src/opengl-helpers/pixel.glsl");
 
     static const GLfloat g_vertex_buffer_data[] = {
         -1.0f,
@@ -185,7 +144,6 @@ int testFunction(){
 
     do
     {
-
         // Clear the screen
         glClear(GL_COLOR_BUFFER_BIT);
 
@@ -209,21 +167,13 @@ int testFunction(){
 
         glDisableVertexAttribArray(0);
 
-        // Swap buffers
-        glfwSwapBuffers(window);
-        glfwPollEvents();
-
-    } // Check if the ESC key was pressed or the window was closed
-    while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS &&
-           glfwWindowShouldClose(window) == 0);
+        window.update();
+    } while (!window.shouldClose());
 
     // Cleanup VBO
     glDeleteBuffers(1, &vertexbuffer);
     glDeleteVertexArrays(1, &VertexArrayID);
     glDeleteProgram(programID);
-
-    // Close OpenGL window and terminate GLFW
-    glfwTerminate();
 
     return 0;
 };
