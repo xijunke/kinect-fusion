@@ -6,7 +6,7 @@ set(EIGEN_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/submodules/eigen/Eigen" CACHE PATH "P
 set(OPENCL_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/submodules/opencl-headers" CACHE PATH "Path to the OpenCL headers")
 set(GLM_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/submodules/glm/glm" CACHE PATH "Path to the GLM headers for OpenGL")
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if (WIN32)
@@ -26,7 +26,8 @@ include_directories("${EIGEN_INCLUDE_DIR}" "${GLM_INCLUDE_DIR}")
 include_directories("${OPENCL_INCLUDE_DIR}" "${OPENGL_INCLUDE_DIR}" "${GLEW_INCLUDE_DIR}")
 link_libraries(${OPENCL_LIBRARIES} ${OPENGL_LIBRARY} ${GLEW_LIBRARIES} glfw freeimage)
 
-add_executable(kinect-fusion src/main.cpp src/shader.hpp src/shader.cpp)
+file(GLOB_RECURSE SOURCES "src/*.cpp" "src/*.h")
+add_executable(kinect-fusion ${SOURCES})
 
 # Visual Studio properties
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT kinect-fusion)
