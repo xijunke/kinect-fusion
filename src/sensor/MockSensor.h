@@ -16,7 +16,7 @@ class MockSensor : public Sensor {
         unsigned int currentFramePosition;
 
         void loadListOfNames(string fileName, vector<string> &list);
-        unique_ptr<float[]> loadImageFromFile(string fileName, ImgType type, unsigned int &width, unsigned int &height);
+        vector<float> loadImageFromFile(string fileName, ImgType type, unsigned int &width, unsigned int &height);
     public:
         MockSensor(string datasetRootPath);
         virtual unique_ptr<Frame> getNextFrame();

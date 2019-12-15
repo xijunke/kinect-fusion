@@ -60,7 +60,7 @@ unique_ptr<Frame> MockSensor::getNextFrame(){
     return make_unique<Frame>(Frame(move(rgb), move(depth), rgbWidth, rgbHeight, intrinsics, intrinsics));
 }
 
-unique_ptr<float[]> MockSensor::loadImageFromFile(string fileName, ImgType type, unsigned int &width, unsigned int &height){
+vector<float> MockSensor::loadImageFromFile(string fileName, ImgType type, unsigned int &width, unsigned int &height){
     FreeImage_Initialise();
 
     if (!FreeImage_FIFSupportsReading(FIF_PNG))
@@ -104,7 +104,7 @@ unique_ptr<float[]> MockSensor::loadImageFromFile(string fileName, ImgType type,
     //  * y the vertical coordinate of the pixel
     //  * c the desired channel (c = 1 is G for example)
     // The corresponding image bit is at `data[(y * width + x) * NUM_OF_CHANNELS + c]`
-    auto data = make_unique<float[]>(NUM_OF_CHANNELS * width * height);
+    auto data = vector<float>(NUM_OF_CHANNELS * width * height);
     for (int y = 0; y < height; ++y) {
         for (int x = 0; x < width; ++x) {
             for (int c = 0; c < NUM_OF_CHANNELS; ++c) {

@@ -9,16 +9,16 @@ using namespace std;
 
 class Frame{
     private:
-        unique_ptr<float[]> colorsRGBA;
-        unique_ptr<float[]> depth;
+        vector<float> colorsRGBA;
+        vector<float> depth;
         const unsigned int width;
         const unsigned int height;
         const Matrix3f colorIntrinsics;
         const Matrix3f depthIntrinsics;
 
     public:
-        Frame(unique_ptr<float[]> rgba, unique_ptr<float[]> d, const unsigned int w, const unsigned int h, const Matrix3f cInt, const Matrix3f dInt)
-            : colorsRGBA(move(rgba)), depth(move(d)), width(w), height(h), colorIntrinsics(cInt), depthIntrinsics(dInt) {}
+        Frame(vector<float> rgba, vector<float> d, const unsigned int w, const unsigned int h, const Matrix3f cInt, const Matrix3f dInt)
+            : colorsRGBA(rgba), depth(d), width(w), height(h), colorIntrinsics(cInt), depthIntrinsics(dInt) {}
         
         const unsigned int getWidth()  { return width;  }
         const unsigned int getHeight() { return height; }

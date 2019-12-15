@@ -13,6 +13,13 @@ int main(int argc, char * argv[]) {
 
     while(true){
         auto frame = sensor->getNextFrame();
+        cout << "frame->r(200, 100) = " << frame->r(200, 100) << endl;
+        cout << "frame->g(200, 100) = " << frame->g(200, 100) << endl;
+        cout << "frame->b(200, 100) = " << frame->b(200, 100) << endl;
+        cout << "frame->d(200, 100) = " << frame->d(200, 100) << endl;
+        cout << frame->getColorIntrinsics() << endl;
+        
+        cin.get();
     }
 
     return 0;
