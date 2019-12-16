@@ -10,7 +10,6 @@ using namespace std;
 class Window{
     private:
         GLFWwindow *window;
-        glm::mat4 proj;
 
         glm::vec3 cameraPos;
         glm::vec3 cameraFront;
@@ -19,6 +18,7 @@ class Window{
 
         GLuint shaderProgramId;
         GLuint viewProjMatrixId;
+        GLuint vaoId;
 
         float lastMouseX, lastMouseY, pitch, yaw;
         bool firstMouse;

@@ -43,11 +43,14 @@ Window::Window(string title, unsigned int width, unsigned int height){
     //Save 'this' in glfw to access that in callbacks
     glfwSetWindowUserPointer(window, this);
 
+    // Create OpenGL default VAO. To be done before any other GL call.
+    glGenVertexArrays(1, &vaoId);
+    glBindVertexArray(vaoId);
+
     // Set black window background
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
     // Initialize camera
-    this->proj = glm::perspective(glm::radians(45.0f), 16.0f / 9.0f, 0.1f, 1000.0f);
     this->cameraPos = glm::vec3(width/2, height/2, 100);
     this->cameraFront = glm::vec3(0, 0, -1);
     this->cameraUp = glm::vec3(0, 1, 0);
@@ -59,6 +62,7 @@ Window::Window(string title, unsigned int width, unsigned int height){
 
 Window::~Window(){
     glfwTerminate();
+    glDeleteVertexArrays(1, &vaoId);
     glDeleteProgram(shaderProgramId);
 }
 
@@ -86,13 +90,19 @@ void Window::update(){
 
 void Window::setup(){
     // Update viewProjection matrix
-    glm::mat4 viewProj = this->proj * glm::lookAt(
+    int w, h;
+    glfwGetWindowSize(window, &w, &h);
+    glm::mat4 proj = glm::perspective(glm::radians(45.0f), (float)w / (float)h, 0.1f, 1000.0f);
+
+    glm::mat4 viewProj = proj * glm::lookAt(
         this->cameraPos,    // Camera pos in world coords
         this->cameraPos + this->cameraFront, // Camera looking at in world coords
         this->cameraUp   // Head is up (set to 0,-1,0 to look upside-down)
     );
 
-    // Clear the screen
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // Define which shader will be used
