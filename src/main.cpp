@@ -81,7 +81,7 @@ int main(int argc, char * argv[]) {
 
         //Actually do the drawing
         glPointSize(5.0f);
-        glDrawArrays(GL_POINTS, 0, actualSize);
+        glDrawArrays(GL_POINTS, 0, actualSize / 3);
 
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);

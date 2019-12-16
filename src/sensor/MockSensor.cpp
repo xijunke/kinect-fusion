@@ -64,10 +64,8 @@ unique_ptr<Frame> MockSensor::getNextFrame(){
     if (currentFramePosition == 2 * framesToCache)
         currentFramePosition = 0;
 
-    if (t < framesToCache)
-        return make_unique<Frame>(Frame(rgbCache[t], depthCache[t], 640, 480, intrinsics, intrinsics));
-    else
-        return make_unique<Frame>(Frame(rgbCache[t - framesToCache], depthCache[t - framesToCache], 640, 480, intrinsics, intrinsics));
+    t = t < framesToCache ? t : framesToCache - (t - framesToCache + 1);
+    return make_unique<Frame>(Frame(rgbCache[t], depthCache[t], 640, 480, intrinsics, intrinsics));
 }
 
 vector<float> MockSensor::loadImageFromFile(string fileName, ImgType type, unsigned int &width, unsigned int &height){
