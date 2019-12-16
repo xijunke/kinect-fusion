@@ -7,7 +7,7 @@
 
 using namespace std;
 
-void denoiseDepthMap(unique_ptr<Frame> &frame, vector<float> &denoised){
+void denoiseDepthMap(unique_ptr<Frame> &frame, vector<float> &denoised, vector<bool> &validityMask){
     for (int u = 0; u < frame->getWidth(); u++)
         for (int v = 0; v < frame->getHeight(); v++)
             denoised[v * frame->getWidth() + u] = frame->d(u, v);

@@ -13,6 +13,9 @@ int testFunction();
 #include "denoising.cpp"
 void denoiseDepthMap(unique_ptr<Frame> &frame, vector<float> &denoised);
 
+#include "depth-to-vertex-and-normals.cpp"
+void computeMipMaps(unique_ptr<Frame> &frame, vector<float> const &denoisedDepthMap, vector<vector<Vector3f>> &vertexMipMap, vector<vector<Vector3f>> &normalsMipMap);
+
 const auto MINF = -std::numeric_limits<float>::infinity();
 
 int main(int argc, char * argv[]) {
@@ -32,12 +35,16 @@ int main(int argc, char * argv[]) {
 
 
 
+        const int SIZE = frame->getWidth() * frame->getHeight();
+
+        vector<float> denoisedDepthMap(SIZE); // D_k
+        vector<bool> validityMask(SIZE); // M
+        denoiseDepthMap(frame, denoisedDepthMap, validityMask);
 
 
-        vector<float> denoisedDepthMap(frame->getWidth() * frame->getHeight());
-
-        denoiseDepthMap(frame, denoisedDepthMap);
-
+        vector<vector<Vector3f>> vertexMipMap(3, vector<Vector3f>(SIZE, Vector3f::Zero())); //V^l_k
+        vector<vector<Vector3f>> normalMipMap(3, vector<Vector3f>(SIZE, Vector3f::Zero())); //N^l_k
+        computeDepthMipMap(frame, denoisedDepthMap, vertexMipMap, normalMipMap);
 
 
 
@@ -52,10 +59,7 @@ int main(int argc, char * argv[]) {
                     points[actualSize + 1] = v;
                     points[actualSize + 2] = 1.0;
 
-                    float d = denoisedDepthMap[v * frame->getWidth() + u] / 2.0f;
-                    d = d > 1 ? 1 : d;
-                    d = d < 0 ? 0 : d;
-                    colors[actualSize + 0] = d;
+                    colors[actualSize + 0] = 0.3;
                     colors[actualSize + 1] = 0;
                     colors[actualSize + 2] = 0;
 
