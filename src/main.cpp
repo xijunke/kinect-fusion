@@ -16,6 +16,9 @@ void denoiseDepthMap(unique_ptr<Frame> &frame, vector<float> &denoised);
 #include "depth-to-vertex-and-normals.cpp"
 void computeMipMaps(unique_ptr<Frame> &frame, vector<float> const &denoisedDepthMap, vector<vector<Vector3f>> &vertexMipMap, vector<vector<Vector3f>> &normalsMipMap);
 
+#include "raycast-tsdf.cpp"
+void raycastTSDF(unique_ptr<Frame> &frame, vector<float> const &tsdf, Matrix4f cameraPos, vector<Vector3f> &verticies, vector<Vector3f> &normals);
+
 const auto MINF = -std::numeric_limits<float>::infinity();
 
 int main(int argc, char * argv[]) {
@@ -46,6 +49,13 @@ int main(int argc, char * argv[]) {
         vector<vector<Vector3f>> normalMipMap(3, vector<Vector3f>(SIZE, Vector3f::Zero())); //N^l_k
         computeDepthMipMap(frame, denoisedDepthMap, vertexMipMap, normalMipMap);
 
+
+        // Simple TSDF without weights or colors for now
+        vector<float> globalTSDF(4 * 4 * 4); //S_k
+        vector<Vector3f> predictedSurfaceVertex(SIZE); //\hat{V}_k
+        Matrix4f currentGlobalPose; //T^g_k
+        vector<Vector3f> predictedSurfaceNormals(SIZE); //\hat{N}_k
+        raycastTSDF(frame, globalTSDF, currentGlobalPose, predictedSurfaceVertex, predictedSurfaceNormals);
 
 
         const int MAX_SIZE = frame->getWidth() * frame->getHeight() * 3;
