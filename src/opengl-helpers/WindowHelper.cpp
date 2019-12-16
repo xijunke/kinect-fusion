@@ -52,7 +52,7 @@ Window::Window(string title, unsigned int width, unsigned int height){
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
     // Initialize camera
-    this->cameraPos = glm::vec3(width/2, height/2, 900);
+    this->cameraPos = glm::vec3(width/2, height/2, 300);
     this->cameraFront = glm::vec3(0, 0, -1);
     this->cameraUp = glm::vec3(0, 1, 0);
 
