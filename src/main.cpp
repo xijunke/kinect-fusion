@@ -15,7 +15,7 @@ const auto MINF = -std::numeric_limits<float>::infinity();
 int main(int argc, char * argv[]) {
     //testFunction();
 
-    auto sensor = std::make_unique<MockSensor>(MockSensor("data/rgbd_dataset_freiburg1_xyz", 30));
+    auto sensor = std::make_unique<MockSensor>(MockSensor("data/rgbd_dataset_freiburg1_xyz", 60));
 
     Window win("KinectFusion", 1024, 1024);
 
@@ -58,10 +58,10 @@ int main(int argc, char * argv[]) {
 
         // Move vertices and colors to appropriate buffers
         glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-        glBufferData(GL_ARRAY_BUFFER, MAX_SIZE, points, GL_DYNAMIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, MAX_SIZE * sizeof(GLfloat), points, GL_DYNAMIC_DRAW);
 
         glBindBuffer(GL_ARRAY_BUFFER, colorBuffer);
-        glBufferData(GL_ARRAY_BUFFER, MAX_SIZE, colors, GL_DYNAMIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, MAX_SIZE * sizeof(GLfloat), colors, GL_DYNAMIC_DRAW);
 
         // Bind data stored in buffers to shader parameters
         glEnableVertexAttribArray(0);

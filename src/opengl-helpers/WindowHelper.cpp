@@ -7,6 +7,7 @@
 #include "WindowHelper.h"
 #include "ShaderHelper.h"
 
+#include <iostream>
 Window::Window(string title, unsigned int width, unsigned int height){
 
     if (!glfwInit())
@@ -51,7 +52,7 @@ Window::Window(string title, unsigned int width, unsigned int height){
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
     // Initialize camera
-    this->cameraPos = glm::vec3(width/2, height/2, 100);
+    this->cameraPos = glm::vec3(width/2, height/2, 900);
     this->cameraFront = glm::vec3(0, 0, -1);
     this->cameraUp = glm::vec3(0, 1, 0);
 
@@ -72,7 +73,7 @@ bool Window::shouldClose(){
 
 void Window::update(){
 
-    float cameraSpeed = 50.0f * (glfwGetTime() - this->time);
+    float cameraSpeed = 100.0f * (glfwGetTime() - this->time);
     this->time = glfwGetTime();
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
@@ -83,6 +84,20 @@ void Window::update(){
         cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+    if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+        cameraPos += cameraSpeed * cameraUp;
+    if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+        cameraPos -= cameraSpeed * cameraUp;
+
+    if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)
+        cout << "cameraPos = (" 
+            << cameraPos.x << ", " 
+            << cameraPos.y << ", " 
+            << cameraPos.z << ")\n\n" 
+            << "cameraFront = (" 
+            << cameraFront.x << ", "
+            << cameraFront.y << ", "
+            << cameraFront.z << ")\n";
 
     glfwSwapBuffers(window);
     glfwPollEvents();
