@@ -42,12 +42,12 @@ int main(int argc, char * argv[]) {
 
         vector<float> denoisedDepthMap(SIZE); // D_k
         vector<bool> validityMask(SIZE); // M
-        denoiseDepthMap(frame, denoisedDepthMap, validityMask);
+        //denoiseDepthMap(frame, denoisedDepthMap, validityMask);
 
 
         vector<vector<Vector3f>> vertexMipMap(3, vector<Vector3f>(SIZE, Vector3f::Zero())); //V^l_k
         vector<vector<Vector3f>> normalMipMap(3, vector<Vector3f>(SIZE, Vector3f::Zero())); //N^l_k
-        computeDepthMipMap(frame, denoisedDepthMap, vertexMipMap, normalMipMap);
+        //computeDepthMipMap(frame, denoisedDepthMap, vertexMipMap, normalMipMap);
 
 
         // Simple TSDF without weights or colors for now
@@ -55,7 +55,7 @@ int main(int argc, char * argv[]) {
         vector<Vector3f> predictedSurfaceVertex(SIZE); //\hat{V}_k
         Matrix4f currentGlobalPose; //T^g_k
         vector<Vector3f> predictedSurfaceNormals(SIZE); //\hat{N}_k
-        raycastTSDF(frame, globalTSDF, currentGlobalPose, predictedSurfaceVertex, predictedSurfaceNormals);
+        //raycastTSDF(frame, globalTSDF, currentGlobalPose, predictedSurfaceVertex, predictedSurfaceNormals);
 
 
         const int MAX_SIZE = frame->getWidth() * frame->getHeight() * 3;
@@ -69,9 +69,9 @@ int main(int argc, char * argv[]) {
                     points[actualSize + 1] = v;
                     points[actualSize + 2] = 1.0;
 
-                    colors[actualSize + 0] = 0.3;
-                    colors[actualSize + 1] = 0;
-                    colors[actualSize + 2] = 0;
+                    colors[actualSize + 0] = frame->r(u, v);
+                    colors[actualSize + 1] = frame->g(u, v);
+                    colors[actualSize + 2] = frame->b(u, v);
 
                     actualSize += 3;
                 }
