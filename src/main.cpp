@@ -10,6 +10,9 @@
 
 int testFunction();
 
+#include "denoising.cpp"
+void denoiseDepthMap(unique_ptr<Frame> &frame, vector<float> &denoised);
+
 const auto MINF = -std::numeric_limits<float>::infinity();
 
 int main(int argc, char * argv[]) {
@@ -26,31 +29,39 @@ int main(int argc, char * argv[]) {
     while(true){
         auto frame = sensor->getNextFrame();
 
-        const int MAX_SIZE = frame->getWidth() * frame->getHeight() * 3;
 
+
+
+
+
+        vector<float> denoisedDepthMap(frame->getWidth() * frame->getHeight());
+
+        denoiseDepthMap(frame, denoisedDepthMap);
+
+
+
+
+        const int MAX_SIZE = frame->getWidth() * frame->getHeight() * 3;
         GLfloat points[MAX_SIZE], colors[MAX_SIZE];
         int actualSize = 0;
+
         for (int u = 0; u < frame->getWidth(); u++){
             for (int v = 0; v < frame->getHeight(); v++){
-                if (frame->d(u, v) == MINF){
+                if (frame->d(u, v) != MINF){
                     points[actualSize + 0] = u;
                     points[actualSize + 1] = v;
-                    points[actualSize + 2] = 1;
+                    points[actualSize + 2] = 1.0;
 
-                    colors[actualSize + 0] = 0;
-                    colors[actualSize + 1] = 0.4;
+                    float d = denoisedDepthMap[v * frame->getWidth() + u] / 2.0f;
+                    d = d > 1 ? 1 : d;
+                    d = d < 0 ? 0 : d;
+                    colors[actualSize + 0] = d;
+                    colors[actualSize + 1] = 0;
                     colors[actualSize + 2] = 0;
-                } else {
-                    points[actualSize + 0] = u;
-                    points[actualSize + 1] = v;
-                    points[actualSize + 2] = frame->d(u, v) * 100;
 
-                    colors[actualSize + 0] = frame->r(u, v);
-                    colors[actualSize + 1] = frame->g(u, v);
-                    colors[actualSize + 2] = frame->b(u, v);
+                    actualSize += 3;
                 }
 
-                actualSize += 3;
             }
         }
 
