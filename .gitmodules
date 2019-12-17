@@ -3,7 +3,7 @@
 	url = https://gitlab.com/libeigen/eigen.git
 [submodule "submodules/opencl-headers"]
 	path = submodules/opencl-headers
-	url = git@github.com:KhronosGroup/OpenCL-Headers.git
+	url = https://github.com/KhronosGroup/OpenCL-Headers.git
 [submodule "submodules/glm"]
 	path = submodules/glm
-	url = git@github.com:g-truc/glm.git
+	url = https://github.com/g-truc/glm.git
