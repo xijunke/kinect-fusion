@@ -32,30 +32,29 @@ int main(int argc, char * argv[]) {
     glGenBuffers(1, &vertexBuffer);
     glGenBuffers(1, &colorBuffer);
 
+    // Allocating all stuff outside the loop to avoid
+    // deleting and reallocating it at every iteration
+
+    //TODO maybe move getWidth and getHeight to Sensor rather than frame?
+    const int SIZE = 640 * 480;
+    vector<float> denoisedDepthMap(SIZE);                                               // D_k
+    vector<bool> validityMask(SIZE);                                                    // M
+    vector<vector<Vector3f>> vertexMipMap(3, vector<Vector3f>(SIZE, Vector3f::Zero())); //V^l_k
+    vector<vector<Vector3f>> normalMipMap(3, vector<Vector3f>(SIZE, Vector3f::Zero())); //N^l_k
+    vector<float> globalTSDF(4 * 4 * 4);                                                //S_k
+    Matrix4f currentGlobalPose;                                                         //T^g_k
+    vector<Vector3f> predictedSurfaceVertices(SIZE);                                    //\hat{V}_k
+    vector<Vector3f> predictedSurfaceNormals(SIZE);                                     //\hat{N}_k
+
     while(true){
         auto frame = sensor->getNextFrame();
 
-
-
-
-        const int SIZE = frame->getWidth() * frame->getHeight();
-
-        vector<float> denoisedDepthMap(SIZE); // D_k
-        vector<bool> validityMask(SIZE); // M
         //denoiseDepthMap(frame, denoisedDepthMap, validityMask);
 
-
-        vector<vector<Vector3f>> vertexMipMap(3, vector<Vector3f>(SIZE, Vector3f::Zero())); //V^l_k
-        vector<vector<Vector3f>> normalMipMap(3, vector<Vector3f>(SIZE, Vector3f::Zero())); //N^l_k
         //computeDepthMipMap(frame, denoisedDepthMap, vertexMipMap, normalMipMap);
 
-
         // Simple TSDF without weights or colors for now
-        vector<float> globalTSDF(4 * 4 * 4); //S_k
-        vector<Vector3f> predictedSurfaceVertex(SIZE); //\hat{V}_k
-        Matrix4f currentGlobalPose; //T^g_k
-        vector<Vector3f> predictedSurfaceNormals(SIZE); //\hat{N}_k
-        //raycastTSDF(frame, globalTSDF, currentGlobalPose, predictedSurfaceVertex, predictedSurfaceNormals);
+        //raycastTSDF(frame, globalTSDF, currentGlobalPose, predictedSurfaceVertices, predictedSurfaceNormals);
 
 
         const int MAX_SIZE = frame->getWidth() * frame->getHeight() * 3;
